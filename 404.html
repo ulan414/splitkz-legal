@@ -106,7 +106,7 @@
   var t = STR[lang];
   document.documentElement.lang = lang;
 
-  var m = location.pathname.match(/^\/g\/(.+?)\/?$/i);
+  var m = location.pathname.match(/^\/splitkz-legal\/g\/(.+?)\/?$/i);
   var app = document.getElementById('app');
 
   function el(tag, attrs, html) {
@@ -161,7 +161,7 @@
     document.title = t.notFoundHeading;
     app.appendChild(el('h1', {}, t.notFoundHeading));
     app.appendChild(el('p', { class: 'sub' }, t.notFoundBody));
-    app.appendChild(el('p', {}, '<a class="home" href="/">' + t.homeLink + '</a>'));
+    app.appendChild(el('p', {}, '<a class="home" href="/splitkz-legal/">' + t.homeLink + '</a>'));
   }
 })();
 </script>

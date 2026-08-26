@@ -1,20 +1,29 @@
-# splitkz-legal → сайт `split.kz`
+# splitkz-legal
 
-Изначально репозиторий был только правовыми документами (`privacy-policy.html`,
-`terms.html`, `data-consent.html`, `support.html`), опубликованными на
-`ulan414.github.io/splitkz-legal/`. С файлом `CNAME` он же обслуживает домен
-`split.kz` целиком — тот, что уже зашит в приложение (`lib/models/models.dart`,
-`AndroidManifest.xml`, `Runner.entitlements`).
+Правовые документы приложения (`privacy-policy.html`, `terms.html`,
+`data-consent.html`, `support.html`) и с недавнего времени ещё и обработчик
+ссылок-приглашений `/g/<code>`.
 
-## Что добавилось и зачем
+## Почему не `split.kz`
+
+Домен `split.kz`, зашитый в приглашения при разработке приложения, ему не
+принадлежит: он занят чужим сайтом (свои NS на `ps.kz`, живая почта
+`mail.split.kz`, хостинг за Basic Auth) и никогда не был куплен. GitHub не
+раздаёт кастомные домены бесплатно — только `<аккаунт>.github.io`. Решили не
+покупать домен, а остаться на бесплатном адресе: сайт живёт на
+`https://ulan414.github.io/splitkz-legal/`, и ссылка-приглашение —
+`https://ulan414.github.io/splitkz-legal/g/<code>`.
+
+## Файлы
 
 | Файл | Зачем |
 | --- | --- |
-| `CNAME` | Говорит GitHub Pages отдавать этот репозиторий по адресу `split.kz`, а не только по `github.io`. |
-| `.nojekyll` | Без него Jekyll игнорирует `.well-known/` — папки с точкой в начале имени не публикуются по умолчанию. |
-| `.well-known/apple-app-site-association` | Universal Links iOS: подтверждает `split.kz`, что ссылки `/g/*` открывает приложение `936TUD5S34.kz.splitkz.splitkz`, а не Safari. |
-| `.well-known/assetlinks.json` | App Links Android: то же самое, но для `kz.splitkz.splitkz`. Отпечатки — `upload-keystore.p12` (сборки отсюда) и debug-ключ (`flutter run`). **Отпечаток Play App Signing нужно дописать**, когда приложение появится в Play Console → Test and release → Setup → App integrity — иначе ссылка не подтвердится на телефонах, где APK стоит из Play. |
-| `404.html` | GitHub Pages отдаёт этот файл на любой несуществующий путь, сохраняя URL в адресной строке — на этом трюке держится `/g/<code>`: страницы `/g/*` физически не существуют (код в ссылке — любой), поэтому единственный способ поймать их статикой — общий 404 с JS, который читает `location.pathname`. Пытается открыть `splitkz://g/<код>`, а если приложения нет — показывает код и подсказку установить. |
+| `404.html` | GitHub Pages отдаёт этот файл на любой несуществующий путь внутри `/splitkz-legal/`, сохраняя URL в адресной строке — на этом трюке держится `/g/<code>`: страницы `/g/*` физически не существуют (код в ссылке — любой), поэтому единственный способ поймать их статикой — общий 404 с JS, который читает `location.pathname`. Пытается открыть `splitkz://g/<код>`, а если приложения нет — показывает код и подсказку установить. |
+
+Файлы верификации ссылок (`.well-known/assetlinks.json` для Android,
+`.well-known/apple-app-site-association` для iOS) здесь не лежат — им место в
+корне домена `ulan414.github.io`, а не под `/splitkz-legal/`. Они — в
+отдельном репозитории `ulan414/ulan414.github.io`.
 
 ## Известное ограничение
 
@@ -24,17 +33,5 @@
 из тела ответа — но гарантии нет. Если превью в чатах будут выглядеть бедно
 (просто голая ссылка без карточки), первый кандидат на замену — Cloudflare
 Pages: тот же бесплатный статический хостинг, но с настоящими редиректами и
-статусом `200` на любой путь.
-
-## Проверить после DNS
-
-```bash
-# Android — Google подтверждает файл сама, но проверить можно и руками:
-curl -s https://split.kz/.well-known/assetlinks.json
-
-# iOS:
-curl -s https://split.kz/.well-known/apple-app-site-association
-
-# Приглашение:
-curl -sI https://split.kz/g/test
-```
+статусом `200` на любой путь, плюс можно повесить свой домен, если он всё же
+появится.
